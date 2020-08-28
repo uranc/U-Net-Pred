@@ -19,9 +19,11 @@ git clone https://github.com/uranc/gamma-net.git
 ```
 
 ## Requirements
-tensorflow v1.14, keras-contrib
+tensorflow v1.14 (cpu/gpu), keras-contrib
 ```shell
 pip install tensorflow==1.14
+or
+pip install tensorflow-gpu==1.14
 pip install git+https://www.github.com/keras-team/keras-contrib.git
 ```
 
@@ -31,7 +33,7 @@ pip install git+https://www.github.com/keras-team/keras-contrib.git
 
 You can use pre-trained model based on VGG-16 to predict gamma peak value in log10 space. Rquires the input data a numpy array.
 ```shell
-python pred.py --mode predict --model a3
+python pred.py --mode predict --model f4
 ```
 
 Input size
@@ -39,8 +41,16 @@ Input size
 Requires TFRecords as an input file
 
 ```shell
-python pred.py --mode train --model save_name
+python pred.py --mode train --e save_name
 ```
 
 
 ## Jupyter notebook
+
+
+
+# To Do List
+  - directory of images
+  - numpy
+  - TFRecords documentation / loss function for training
+  
