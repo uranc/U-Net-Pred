@@ -20,12 +20,10 @@ git clone https://github.com/uranc/U-Net-Pred.git
 ```
 
 ## Requirements
-tensorflow v1.14 (cpu/gpu), keras-contrib
+tensorflow v1.14, keras v2.2.4, scikit-image==0.17.2 (optional: other versions should also work)
 ```shell
 pip install tensorflow==1.14
-or
-pip install tensorflow-gpu==1.14
-pip install git+https://www.github.com/keras-team/keras-contrib.git
+pip install keras==2.2.4
 ```
 
 # Usage
