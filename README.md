@@ -16,7 +16,7 @@ For more details, please see the methods part of our paper:
 Clone/Fork the repository to use the scripts.
 
 ```shell
-git clone https://github.com/uranc/gamma-net.git
+git clone https://github.com/uranc/U-Net-Pred.git
 ```
 
 ## Requirements
@@ -32,30 +32,31 @@ pip install git+https://www.github.com/keras-team/keras-contrib.git
 
 ## Command-Line
 
-You can use the pre-trained model based on VGG-16 to predict gamma peak value in log10 space. Requires the input data to be a numpy array.
-```shell
-python pred.py --mode predict --model f4 --input examples/sample.npy
-```
+You can use the pre-trained model based on VGG-16 to get a predictability measure.
 
-Requires TFRecords as an input file
+Input size is originally 224x224x3 and training set consisted of Black & White and color images. Input can either be:
+  - A single image file (224x224x3) - see skimage.io.imread for details
+  - A 4D numpy array ( num_images x 224x224x3)
+
+As the network is fully convolutional other image sizes should work fine - as long as it is larger than 84x84.
 
 ```shell
-python pred.py --mode train --e save_name
+python pred.py --input examples/sample_img.png
+```  
+Output will be printed on the command line. 
+
+```shell
+python pred.py --input examples/sample.npy
 ```
+Output will be saved to examples/sample_pred.npy
+  
+
 
 ## Jupyter notebook
-
 - paper figure 
-
-# To Do List
-  - TFRecords documentation / loss function for training
-  - cleanup / comment
   
-# New Features  
-  - Variable Input size
-  - Variable Mask
+## New Features  
   - directory of images
-  - numpy
   
   
 
