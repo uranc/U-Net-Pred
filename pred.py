@@ -7,14 +7,14 @@ from scipy.stats import pearsonr
 from tensorflow.keras import backend as K
 from model.model_fn import build_compile_model
 
-def get_numpy_dataset(fname, batch_size=64):
-    tmp = np.transpose(np.load(fname), [3,0,1,2])
-    BATCH_SIZE = batch_size
-    test_dataset = tf.data.Dataset.from_tensor_slices((tmp, np.zeros((tmp.shape[0], 1))))
-    test_dataset = test_dataset.batch(BATCH_SIZE)
-    iterator = tf.compat.v1.data.make_one_shot_iterator(test_dataset)
-    initializer = iterator.make_initializer(test_dataset)
-    return (iterator, initializer), tmp.shape[0]
+# def get_numpy_dataset(fname, batch_size=64):
+#     tmp = np.transpose(np.load(fname), [3,0,1,2])
+#     BATCH_SIZE = batch_size
+#     test_dataset = tf.data.Dataset.from_tensor_slices((tmp, np.zeros((tmp.shape[0], 1))))
+#     test_dataset = test_dataset.batch(BATCH_SIZE)
+#     iterator = tf.compat.v1.data.make_one_shot_iterator(test_dataset)
+#     initializer = iterator.make_initializer(test_dataset)
+#     return (iterator, initializer), tmp.shape[0]
 
 
 parser = argparse.ArgumentParser(
@@ -51,17 +51,18 @@ model.summary()
 flag_numpy = 1 if file_ext=='.npy' else 0
 
 if flag_numpy:
-    out, test_size = get_numpy_dataset(input_name, BATCH_SIZE)
-    test_steps = int(np.floor(test_size/BATCH_SIZE))+1
-    test_inputs, initializer = out
-    sess = tf.Session()
-    this_input = test_inputs.get_next()    
+    # out, test_size = get_numpy_dataset(input_name, BATCH_SIZE)
+    # test_steps = int(np.floor(test_size/BATCH_SIZE))+1
+    # test_inputs, initializer = out
+    # sess = tf.Session()
+    # this_input = test_inputs.get_next()   
+    this_input = np.transpose(np.load(input_name), (3, 0, 1, 2))
+    test_steps = 1
 else:
     from skimage.io import imread
     from skimage.transform import resize
     img = imread(input_name)
     this_input = np.expand_dims(img, axis=0)
-    test_size = 1
     test_steps = 1
     
 #
@@ -72,7 +73,7 @@ HALF_SIZE = int(this_input.shape[1]/2)
 # make simple mask
 im_mask = np.ones(this_input.shape)
 im_mask[:, HALF_SIZE-PXD:HALF_SIZE+PXD, HALF_SIZE-PXD:HALF_SIZE+PXD, :] = 0
-
+# pdb.set_trace()
 # VGG-16 preprocessing
 for ii in range(NO_INPUT):
     this_input[ii, :, :, :] -= [103.939, 116.779, 123.68]
