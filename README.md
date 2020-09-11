@@ -40,14 +40,14 @@ Input size is originally 224x224x3 and training set consisted of Black & White a
 As the network is fully convolutional other image sizes should work fine - as long as it is larger than 84x84.
 
 ```shell
-python pred.py --input examples/sample_img.png
+python pred.py --input examples/sample_im.png
 ```  
 Output will be printed on the command line. 
 
 ```shell
-python pred.py --input examples/samples.npy
+python pred.py --input examples/samples_nat_im.npy
 ```
-Output will be saved to examples/samples_pred.npy
+Output will be saved to examples/samples_nat_im_pred.npy
   
 
 
