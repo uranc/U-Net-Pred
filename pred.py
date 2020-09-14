@@ -42,7 +42,7 @@ model.summary()
 flag_numpy = 1 if file_ext=='.npy' else 0
 
 if flag_numpy:
-    this_input = np.transpose(np.load(input_name), (3, 0, 1, 2))
+    this_input = np.load(input_name)
     test_steps = 1
 else:
     from skimage.io import imread
