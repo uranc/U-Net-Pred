@@ -62,6 +62,7 @@ im_mask[:, HALF_SIZE-PXD:HALF_SIZE+PXD, HALF_SIZE-PXD:HALF_SIZE+PXD, :] = 0
 
 # VGG-16 preprocessing
 for ii in range(NO_INPUT):
+    this_input[ii, :, :, :] = this_input[ii, :, :, ::-1]
     this_input[ii, :, :, :] -= [103.939, 116.779, 123.68]
 pred = model.predict([this_input]+[im_mask], steps=test_steps)
 
