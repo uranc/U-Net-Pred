@@ -29,7 +29,7 @@ params = {'weight_dir': 'weights.last.h5', 'lr': 1.56*1e-4,
 
 WEIGHT_DIR = 'weights.last.h5'
 BATCH_SIZE = 64
-PXD = 52 # pixels per degree - should be even 
+PXD = 52/2 # pixels per degree - should be even 
 
 # input
 out_name, file_ext = os.path.splitext(input_name)
