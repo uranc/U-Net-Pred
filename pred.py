@@ -73,6 +73,8 @@ for ii in range(NO_INPUT):
     this_input[ii, :, :, :] += [103.939, 116.779, 123.68]
     img[img < 0] = 0
     img[img > 255] = 255
+    img = img[ii,:,:,::-1]
+    this_input[ii, :, :, :] = this_input[ii,:,:,::-1]
 
 # predictability
 predictability = np.zeros((NO_INPUT, ))
