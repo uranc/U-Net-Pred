@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from model.model_fn import build_compile_model
 from model_tools.check_submission import check_models
 
 """
@@ -12,7 +15,7 @@ def get_model_list():
     If the submission contains only one model, return a one item list.
     :return: a list of model string names
     """
-    return []
+    return ['gammanet']
 
 
 def get_model(name):
@@ -24,7 +27,10 @@ def get_model(name):
     :param name: the name of the model to fetch
     :return: the model instance
     """
-    return
+    assert name == 'gammanet'
+    WEIGHT_DIR = Path(__file__).parent
+    model = build_compile_model(WEIGHT_DIR)
+    return model
 
 
 def get_layers(name):
@@ -37,14 +43,27 @@ def get_layers(name):
     :param name: the name of the model, to return the layers for
     :return: a list of strings containing all layers, that should be considered as brain area.
     """
-    return []
+    assert name == 'gammanet'
+    return ['todo']
 
 
 def get_bibtex(model_identifier):
     """
     A method returning the bibtex reference of the requested model as a string.
     """
-    return ''
+    assert model_identifier == 'gammanet'
+    return """@article {Uran2020.08.10.242958,
+        author = {Uran, Cem and Peter, Alina and Lazar, Andreea and Barnes, William and Klon-Lipok, Johanna and Shapcott, Katharine A and Roese, Rasmus and Fries, Pascal and Singer, Wolf and Vinck, Martin},
+        title = {Predictive coding of natural images by V1 activity revealed by self-supervised deep neural networks},
+        elocation-id = {2020.08.10.242958},
+        year = {2021},
+        doi = {10.1101/2020.08.10.242958},
+        publisher = {Cold Spring Harbor Laboratory},
+        abstract = {Predictive coding is an important candidate theory of self-supervised learning in the brain. Its central idea is that neural activity results from an integration and comparison of bottom-up inputs with contextual predictions, a process in which firing rates and synchronization may play distinct roles. Here, we quantified stimulus predictability for natural images based on self-supervised, generative neural networks. When the precise pixel structure of a stimulus falling into the V1 receptive field (RF) was predicted by the spatial context, V1 exhibited characteristic γ-synchronization (30-80Hz), despite no detectable modulation of firing rates. In contrast to γ, β-synchronization emerged exclusively for unpredictable stimuli. Natural images with high structural predictability were characterized by high compressibility and low dimensionality. Yet, perceptual similarity was mainly determined by higher-level features of natural stimuli, not by the precise pixel structure. When higher-level features of the stimulus in the receptive field were predicted by the context, neurons showed a strong reduction in firing rates and an increase in surround suppression that was dissociated from synchronization patterns. These findings reveal distinct roles of synchronization and firing rates in the predictive coding of natural images.Competing Interest StatementThe authors have declared no competing interest.},
+        URL = {https://www.biorxiv.org/content/early/2021/04/22/2020.08.10.242958},
+        eprint = {https://www.biorxiv.org/content/early/2021/04/22/2020.08.10.242958.full.pdf},
+        journal = {bioRxiv}
+    }"""
 
 
 if __name__ == '__main__':
