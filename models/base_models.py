@@ -44,7 +44,7 @@ def get_model(name):
         'input_size': 224
     }
     model = build_compile_model(params)
-    basemodel = KerasWrapper(model=model, preprocessing=preprocessing)
+    basemodel = KerasWrapper(model=model, preprocessing=preprocessing, batch_size=1)
     return basemodel
 
 
