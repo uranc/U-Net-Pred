@@ -29,7 +29,7 @@ params = {'weight_dir': 'weights.last.h5', 'lr': 1.56*1e-4,
 
 WEIGHT_DIR = 'weights.last.h5'
 BATCH_SIZE = 64
-PXD = 52 # pixels per degree - should be even 
+PXD = 26 # pixels per degree - should be even 
 
 # input
 out_name, file_ext = os.path.splitext(input_name)
@@ -62,6 +62,7 @@ im_mask[:, HALF_SIZE-PXD:HALF_SIZE+PXD, HALF_SIZE-PXD:HALF_SIZE+PXD, :] = 0
 
 # VGG-16 preprocessing
 for ii in range(NO_INPUT):
+    this_input[ii, :, :, :] = this_input[ii, :, :, ::-1]
     this_input[ii, :, :, :] -= [103.939, 116.779, 123.68]
 pred = model.predict([this_input]+[im_mask], steps=test_steps)
 
@@ -72,14 +73,17 @@ for ii in range(NO_INPUT):
     this_input[ii, :, :, :] += [103.939, 116.779, 123.68]
     img[img < 0] = 0
     img[img > 255] = 255
+    img = img[ii,:,:,::-1]
+    this_input[ii, :, :, :] = this_input[ii,:,:,::-1]
 
 # predictability
 predictability = np.zeros((NO_INPUT, ))
 for ii in range(NO_INPUT):
-    predictability[ii] = pearsonr(pred[ii, :,:,:].flatten(), this_input[ii, :,:,:].flatten())[0]
+    predictability[ii] = pearsonr(pred[ii, HALF_SIZE-PXD:HALF_SIZE+PXD, HALF_SIZE-PXD:HALF_SIZE+PXD,:].flatten(), 
+                                  this_input[ii, HALF_SIZE-PXD:HALF_SIZE+PXD, HALF_SIZE-PXD:HALF_SIZE+PXD,:].flatten())[0]
 
 # output
 if flag_numpy:
     np.save(out_name + '_predictability.npy', predictability)
 else:
-    print(predictability[0])
+    print('Predictability', predictability[0])
