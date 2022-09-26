@@ -1,6 +1,9 @@
 from pathlib import Path
 
+import numpy as np
+
 from model.model_fn import build_compile_model
+from model_tools.activations.keras import KerasWrapper, load_images
 from model_tools.check_submission import check_models
 
 """
@@ -28,9 +31,34 @@ def get_model(name):
     :return: the model instance
     """
     assert name == 'gammanet'
-    WEIGHT_DIR = Path(__file__).parent
-    model = build_compile_model(WEIGHT_DIR)
-    return model
+    params = {
+        # https://github.com/uranc/U-Net-Pred/blob/e9170a8edca7ab3d5baf0b632c614b9bc8a27d1a/sample_nat_im_demo.ipynb
+        'weight_dir': str(Path(__file__).parent / '..' / 'weights.last.h5'), 'lr': 1.56 * 1e-4,
+        'p_content': 0, 'p_style': 0, 'p_hole': 0, 'p_tv': 0,
+        'p_fft_s': 0.002, 'p_fft_c': 8.79,  # 'p_fft_s': 0.330, 'p_fft_c': 505.47,
+        'p_fft_abs': 1, 'p_fft_log': 0.026, 'p_fft_phase': 6.45e-05,  # .0556
+        'b_size': 4, 'current_epoch': 0,
+        'n_epoch': 150000,
+        'exp_dir': 'experiments/',
+        'inst_norm': False,
+        'input_size': 224
+    }
+    model = build_compile_model(params)
+    basemodel = KerasWrapper(model=model, preprocessing=preprocessing)
+    return basemodel
+
+
+def preprocessing(stimulus_paths):
+    images = load_images(stimulus_paths, image_size=224)
+    # from https://github.com/uranc/U-Net-Pred/blob/e9170a8edca7ab3d5baf0b632c614b9bc8a27d1a/sample_nat_im_demo.ipynb
+    normalizer = [103.939, 116.779, 123.68]
+    images = [image[:, :] - normalizer for image in images]
+    images = [np.expand_dims(image, axis=0) for image in images]
+
+    im_mask = [np.zeros(image.shape) for image in images]
+    model_input = [images] + [im_mask]
+
+    return model_input
 
 
 def get_layers(name):
@@ -44,7 +72,7 @@ def get_layers(name):
     :return: a list of strings containing all layers, that should be considered as brain area.
     """
     assert name == 'gammanet'
-    return ['todo']
+    return ['re_lu'] + [f're_lu_{num}' for num in range(1, 20)]
 
 
 def get_bibtex(model_identifier):
